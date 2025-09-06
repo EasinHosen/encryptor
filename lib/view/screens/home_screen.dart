@@ -1,3 +1,4 @@
+import 'package:encryptor/view/styles/app_colors.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +14,11 @@ class HomeScreen extends StatelessWidget {
       appBar: kIsWeb
           ? null
           : AppBar(
-              title: const Text('Encryptor'),
+              title: const Text(
+                'Encryptor',
+                style: TextStyle(color: Colors.white),
+              ),
+              backgroundColor: AppColors.colorPrimary,
             ),
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
@@ -21,9 +26,8 @@ class HomeScreen extends StatelessWidget {
           EncryptionMethodTile(
             title: 'Caesar Cipher',
             description: 'A classic shift cipher technique.',
-            routeName: '/caesar',
+            // onTap: ,
           ),
-          // Add more EncryptionMethodTile widgets here for other methods
         ],
       ),
     );
