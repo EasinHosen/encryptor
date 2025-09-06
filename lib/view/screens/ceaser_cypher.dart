@@ -41,13 +41,30 @@ class _CeaserCypherState extends State<CeaserCypher> {
                 HomeController.to.ceaserEncryptedText(HomeController.to
                     .encryptCaesar(inputTextController.text.trim(),
                         int.tryParse(inputShiftController.text.trim()) ?? 3));
+
+                HomeController.to.ceaserDecryptedText(HomeController.to
+                    .decryptCaesar(HomeController.to.ceaserEncryptedText.value,
+                        int.tryParse(inputShiftController.text.trim()) ?? 3));
               },
               buttonText: 'Encrypt'),
-          SizedBox(height: Get.height * 0.01),
+          SizedBox(height: Get.height * 0.2),
+          const Text(
+            'Encrypted text:',
+            textAlign: TextAlign.center,
+          ),
           Obx(() => Text(
-              'Encrypted text: \n${HomeController.to.ceaserEncryptedText}')),
+                '${HomeController.to.ceaserEncryptedText}',
+                textAlign: TextAlign.center,
+              )),
           SizedBox(height: Get.height * 0.01),
-          Text('Decrypted text: \n'),
+          const Text(
+            'Decrypted text:',
+            textAlign: TextAlign.center,
+          ),
+          Obx(() => Text(
+                '${HomeController.to.ceaserDecryptedText}',
+                textAlign: TextAlign.center,
+              )),
         ],
       ),
     );
