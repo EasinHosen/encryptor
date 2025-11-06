@@ -36,7 +36,7 @@ class _MonoAlphabeticSubstitutionState
           CustomTextField(
             controller: inputShiftController,
             title: 'Key value',
-            hintText: 'Enter shift value of 26 letter',
+            hintText: 'Enter key value of 26 letter',
             keyboardType: TextInputType.text,
           ),
           PrimaryButton(

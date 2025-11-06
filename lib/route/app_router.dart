@@ -4,6 +4,8 @@ import 'package:encryptor/view/screens/home_screen.dart';
 import 'package:encryptor/view/screens/monoalphabetic_substitution.dart';
 import 'package:get/get.dart';
 
+import '../view/screens/playfair_cipher.dart';
+
 class AppRouter {
   AppRouter._();
 
@@ -22,6 +24,10 @@ class AppRouter {
     GetPage(
       name: MonoAlphabeticSubstitution.routeName,
       page: () => const MonoAlphabeticSubstitution(),
+    ),
+    GetPage(
+      name: PlayFairCipher.routeName,
+      page: () => const PlayFairCipher(),
     ),
   ];
 }
