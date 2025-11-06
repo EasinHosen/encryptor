@@ -3,6 +3,7 @@ import 'package:encryptor/view/screens/ceaser_cypher.dart';
 import 'package:encryptor/view/screens/hill_cipher.dart';
 import 'package:encryptor/view/screens/home_screen.dart';
 import 'package:encryptor/view/screens/monoalphabetic_substitution.dart';
+import 'package:encryptor/view/screens/polyalphabetic_cipher.dart';
 import 'package:get/get.dart';
 
 import '../view/screens/playfair_cipher.dart';
@@ -33,6 +34,10 @@ class AppRouter {
     GetPage(
       name: HillCipher.routeName,
       page: () => const HillCipher(),
+    ),
+    GetPage(
+      name: PolyalphabeticCipher.routeName,
+      page: () => const PolyalphabeticCipher(),
     ),
   ];
 }

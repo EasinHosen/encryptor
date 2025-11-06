@@ -2,6 +2,7 @@ import 'package:encryptor/view/screens/ceaser_cypher.dart';
 import 'package:encryptor/view/screens/hill_cipher.dart';
 import 'package:encryptor/view/screens/monoalphabetic_substitution.dart';
 import 'package:encryptor/view/screens/playfair_cipher.dart';
+import 'package:encryptor/view/screens/polyalphabetic_cipher.dart';
 import 'package:encryptor/view/styles/app_colors.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -50,6 +51,12 @@ class HomeScreen extends StatelessWidget {
             description:
                 'The Hill cipher is a polygraphic substitution cipher that uses linear algebra to encrypt blocks of letters. It applies a key matrix to plaintext blocks, making it more secure than simple substitution ciphers. Decryption requires the inverse of the key matrix.',
             onTap: () => Get.toNamed(HillCipher.routeName),
+          ),
+          EncryptionMethodTile(
+            title: 'Polyalphabetic Cipher',
+            description:
+                'A polyalphabetic cipher encrypts text by using multiple substitution alphabets, typically controlled by a keyword. Each letter in the plaintext is shifted by a different amount depending on the corresponding letter in the key, making the cipher more resistant to frequency analysis than simple substitution ciphers. The Vigenère cipher is a well-known example.',
+            onTap: () => Get.toNamed(PolyalphabeticCipher.routeName),
           ),
         ],
       ),

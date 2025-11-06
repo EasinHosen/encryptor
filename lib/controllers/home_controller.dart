@@ -15,6 +15,9 @@ class HomeController extends GetxController {
   RxString hillCipherEncryptedText = ''.obs;
   RxString hillCipherDecryptedText = ''.obs;
 
+  RxString polyAlphabeticCipherEncryptedText = ''.obs;
+  RxString polyAlphabeticCipherDecryptedText = ''.obs;
+
   //***Caesar cipher start***//
   String encryptCaesar(String input, int shift) {
     return input.split('').map((char) {
@@ -301,4 +304,30 @@ class HomeController extends GetxController {
     return out.join();
   }
   //***Hill cipher end***//
+
+  //***polyalphabetic cipher starts***//
+  String encryptVigenere(String text, String key) {
+    text = text.toUpperCase().replaceAll(' ', '');
+    key = key.toUpperCase();
+    String result = '';
+    for (int i = 0; i < text.length; i++) {
+      int t = text.codeUnitAt(i) - 65;
+      int k = key.codeUnitAt(i % key.length) - 65;
+      result += String.fromCharCode(((t + k) % 26) + 65);
+    }
+    return result;
+  }
+
+  String decryptVigenere(String text, String key) {
+    text = text.toUpperCase().replaceAll(' ', '');
+    key = key.toUpperCase();
+    String result = '';
+    for (int i = 0; i < text.length; i++) {
+      int t = text.codeUnitAt(i) - 65;
+      int k = key.codeUnitAt(i % key.length) - 65;
+      result += String.fromCharCode(((t - k + 26) % 26) + 65);
+    }
+    return result;
+  }
+//***polyalphabetic cipher starts***//
 }
