@@ -4,22 +4,22 @@ import 'package:encryptor/view/common_widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class PlayFairCipher extends StatefulWidget {
-  const PlayFairCipher({super.key});
-  static const String routeName = '/playfair';
+class HillCipher extends StatefulWidget {
+  const HillCipher({super.key});
+  static const String routeName = '/hill';
 
   @override
-  State<PlayFairCipher> createState() => _PlayFairCipherState();
+  State<HillCipher> createState() => _HillCipherState();
 }
 
-class _PlayFairCipherState extends State<PlayFairCipher> {
+class _HillCipherState extends State<HillCipher> {
   final TextEditingController inputTextController = TextEditingController();
   final TextEditingController inputKeyController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Playfair Cipher'),
+        title: const Text('Hill Cipher'),
       ),
       body: ListView(
         padding: const EdgeInsets.all(8),
@@ -33,7 +33,7 @@ class _PlayFairCipherState extends State<PlayFairCipher> {
           CustomTextField(
             controller: inputKeyController,
             title: 'Key value',
-            hintText: 'Enter a word of phrase',
+            hintText: 'Enter a single word',
             keyboardType: TextInputType.text,
           ),
           PrimaryButton(
@@ -41,11 +41,23 @@ class _PlayFairCipherState extends State<PlayFairCipher> {
               final input = inputTextController.text.trim();
               final key = inputKeyController.text.trim();
 
-              if (key.isEmpty || !RegExp(r'^[A-Za-z]+$').hasMatch(key)) {
+              if (key.isEmpty ||
+                  !(RegExp(r'^[A-Za-z]+$').hasMatch(key) &&
+                      (key.length == 4 || key.length == 9))) {
                 Get.showSnackbar(const GetSnackBar(
                   title: 'Error',
                   duration: Duration(seconds: 3),
-                  message: 'Key must contain only letters',
+                  message:
+                      'Key must contain only letters and be 4 or 9 characters (for 2x2 or 3x3 matrix)',
+                ));
+                return;
+              }
+              if (!HomeController.to.isHillKeyInvertible(key)) {
+                Get.showSnackbar(const GetSnackBar(
+                  title: 'Error',
+                  duration: Duration(seconds: 3),
+                  message:
+                      'Key is not invertible. Please choose a different key.',
                 ));
                 return;
               }
@@ -64,11 +76,12 @@ class _PlayFairCipherState extends State<PlayFairCipher> {
                 if (input[i] == ' ') spacePositions.add(i);
               }
 
-              final encrypted = HomeController.to.encryptPlayfair(input, key);
-              HomeController.to.playfairCypherEncryptedText(encrypted);
+              final encrypted = HomeController.to.encryptHill(input, key);
+              HomeController.to.hillCipherEncryptedText(encrypted);
 
-              var decrypted = HomeController.to.decryptPlayfair(encrypted, key);
+              var decrypted = HomeController.to.decryptHill(encrypted, key);
 
+              decrypted = decrypted.replaceAll(RegExp(r'X+$'), '');
               // Re-insert spaces
               for (final pos in spacePositions) {
                 if (pos < decrypted.length) {
@@ -76,8 +89,7 @@ class _PlayFairCipherState extends State<PlayFairCipher> {
                       '${decrypted.substring(0, pos)} ${decrypted.substring(pos)}';
                 }
               }
-
-              HomeController.to.playfairCypherDecryptedText(decrypted);
+              HomeController.to.hillCipherDecryptedText(decrypted);
             },
             buttonText: 'Encrypt',
           ),
@@ -87,7 +99,7 @@ class _PlayFairCipherState extends State<PlayFairCipher> {
             textAlign: TextAlign.center,
           ),
           Obx(() => Text(
-                '${HomeController.to.playfairCypherEncryptedText}',
+                '${HomeController.to.hillCipherEncryptedText}',
                 textAlign: TextAlign.center,
               )),
           SizedBox(height: Get.height * 0.01),
@@ -96,7 +108,7 @@ class _PlayFairCipherState extends State<PlayFairCipher> {
             textAlign: TextAlign.center,
           ),
           Obx(() => Text(
-                '${HomeController.to.playfairCypherDecryptedText}',
+                '${HomeController.to.hillCipherDecryptedText}',
                 textAlign: TextAlign.center,
               )),
         ],

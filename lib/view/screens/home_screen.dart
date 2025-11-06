@@ -1,4 +1,5 @@
 import 'package:encryptor/view/screens/ceaser_cypher.dart';
+import 'package:encryptor/view/screens/hill_cipher.dart';
 import 'package:encryptor/view/screens/monoalphabetic_substitution.dart';
 import 'package:encryptor/view/screens/playfair_cipher.dart';
 import 'package:encryptor/view/styles/app_colors.dart';
@@ -43,6 +44,12 @@ class HomeScreen extends StatelessWidget {
             description:
                 'The Playfair cipher is a manual symmetric encryption technique that encrypts pairs of letters using a 5x5 matrix generated from a keyword, making it more secure than simple substitution ciphers.',
             onTap: () => Get.toNamed(PlayFairCipher.routeName),
+          ),
+          EncryptionMethodTile(
+            title: 'Hill Cipher',
+            description:
+                'The Hill cipher is a polygraphic substitution cipher that uses linear algebra to encrypt blocks of letters. It applies a key matrix to plaintext blocks, making it more secure than simple substitution ciphers. Decryption requires the inverse of the key matrix.',
+            onTap: () => Get.toNamed(HillCipher.routeName),
           ),
         ],
       ),

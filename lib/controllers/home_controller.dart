@@ -12,6 +12,10 @@ class HomeController extends GetxController {
   RxString playfairCypherEncryptedText = ''.obs;
   RxString playfairCypherDecryptedText = ''.obs;
 
+  RxString hillCipherEncryptedText = ''.obs;
+  RxString hillCipherDecryptedText = ''.obs;
+
+  //***Caesar cipher start***//
   String encryptCaesar(String input, int shift) {
     return input.split('').map((char) {
       if (char.contains(RegExp(r'[A-Za-z]'))) {
@@ -35,7 +39,9 @@ class HomeController extends GetxController {
       return char;
     }).join();
   }
+  //***Caesar cipher end***//
 
+  //***Monoalphabetic cipher start***//
   String encryptMonoalphabetic(String input, String key) {
     final upperKey = key.toUpperCase();
     final lowerKey = key.toLowerCase();
@@ -63,7 +69,9 @@ class HomeController extends GetxController {
       return char;
     }).join();
   }
+  //***Monoalphabetic cipher end***//
 
+  //***playfair cipher start***//
   List<List<String>> generatePlayfairMatrix(String key) {
     key = key.toUpperCase().replaceAll('J', 'I');
     final seen = <String>{};
@@ -156,4 +164,141 @@ class HomeController extends GetxController {
     }
     return out.join();
   }
+  //***playfair cipher end***//
+
+  //***Hill cipher start***//
+  bool isHillKeyInvertible(String key) {
+    // Convert key to matrix (2x2 or 3x3)
+    final size = (key.length == 4) ? 2 : 3;
+    final matrix = List.generate(size,
+        (i) => List.generate(size, (j) => key.codeUnitAt(i * size + j) % 65));
+
+    // Calculate determinant
+    int det;
+    if (size == 2) {
+      det = matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0];
+    } else {
+      det = matrix[0][0] *
+              (matrix[1][1] * matrix[2][2] - matrix[1][2] * matrix[2][1]) -
+          matrix[0][1] *
+              (matrix[1][0] * matrix[2][2] - matrix[1][2] * matrix[2][0]) +
+          matrix[0][2] *
+              (matrix[1][0] * matrix[2][1] - matrix[1][1] * matrix[2][0]);
+    }
+    det = det % 26;
+    if (det < 0) det += 26;
+
+    // Check if determinant and 26 are coprime
+    int gcd(int a, int b) => b == 0 ? a : gcd(b, a % b);
+    return gcd(det, 26) == 1;
+  }
+
+  List<List<int>> _keyToMatrix(String key) {
+    key = key.toUpperCase().replaceAll(RegExp(r'[^A-Z]'), '');
+    int size = (key.length == 4) ? 2 : 3;
+    if (key.length != size * size) throw Exception('Key length must be 4 or 9');
+    List<List<int>> matrix = [];
+    for (int i = 0; i < size; i++) {
+      matrix.add(List.generate(size, (j) => key.codeUnitAt(i * size + j) - 65));
+    }
+    return matrix;
+  }
+
+  List<int> _modMultiply(List<List<int>> matrix, List<int> vector) {
+    int size = vector.length;
+    return List.generate(size, (i) {
+      int sum = 0;
+      for (int j = 0; j < size; j++) {
+        sum += matrix[i][j] * vector[j];
+      }
+      return sum % 26;
+    });
+  }
+
+  int _modInverse(int a, int m) {
+    for (int x = 1; x < m; x++) {
+      if ((a * x) % m == 1) return x;
+    }
+    throw Exception('No modular inverse');
+  }
+
+  List<List<int>> _matrixInverse(List<List<int>> matrix) {
+    int size = matrix.length;
+    int det;
+    if (size == 2) {
+      det = (matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]) % 26;
+      int invDet = _modInverse((det + 26) % 26, 26);
+      return [
+        [(matrix[1][1] * invDet) % 26, ((-matrix[0][1] + 26) * invDet) % 26],
+        [((-matrix[1][0] + 26) * invDet) % 26, (matrix[0][0] * invDet) % 26]
+      ];
+    } else if (size == 3) {
+      // Calculate determinant and adjugate for 3x3
+      int a = matrix[0][0], b = matrix[0][1], c = matrix[0][2];
+      int d = matrix[1][0], e = matrix[1][1], f = matrix[1][2];
+      int g = matrix[2][0], h = matrix[2][1], i = matrix[2][2];
+      det = (a * (e * i - f * h) - b * (d * i - f * g) + c * (d * h - e * g)) %
+          26;
+      int invDet = _modInverse((det + 26) % 26, 26);
+      List<List<int>> adj = [
+        [
+          ((e * i - f * h) * invDet) % 26,
+          ((-(b * i - c * h) + 26) * invDet) % 26,
+          ((b * f - c * e) * invDet) % 26
+        ],
+        [
+          ((-(d * i - f * g) + 26) * invDet) % 26,
+          ((a * i - c * g) * invDet) % 26,
+          ((-(a * f - c * d) + 26) * invDet) % 26
+        ],
+        [
+          ((d * h - e * g) * invDet) % 26,
+          ((-(a * h - b * g) + 26) * invDet) % 26,
+          ((a * e - b * d) * invDet) % 26
+        ]
+      ];
+      // Transpose adjugate
+      return List.generate(
+          3, (i) => List.generate(3, (j) => (adj[j][i] + 26) % 26));
+    } else {
+      throw Exception('Only 2x2 and 3x3 supported');
+    }
+  }
+
+  String encryptHill(String input, String key) {
+    input = input.toUpperCase().replaceAll(RegExp(r'[^A-Z]'), '');
+    final matrix = _keyToMatrix(key);
+    int size = matrix.length;
+    while (input.length % size != 0) input += 'X';
+    final out = <String>[];
+    for (int i = 0; i < input.length; i += size) {
+      final block = input
+          .substring(i, i + size)
+          .split('')
+          .map((c) => c.codeUnitAt(0) - 65)
+          .toList();
+      final enc = _modMultiply(matrix, block);
+      out.addAll(enc.map((n) => String.fromCharCode(n + 65)));
+    }
+    return out.join();
+  }
+
+  String decryptHill(String input, String key) {
+    input = input.toUpperCase().replaceAll(RegExp(r'[^A-Z]'), '');
+    final matrix = _keyToMatrix(key);
+    final invMatrix = _matrixInverse(matrix);
+    int size = matrix.length;
+    final out = <String>[];
+    for (int i = 0; i < input.length; i += size) {
+      final block = input
+          .substring(i, i + size)
+          .split('')
+          .map((c) => c.codeUnitAt(0) - 65)
+          .toList();
+      final dec = _modMultiply(invMatrix, block);
+      out.addAll(dec.map((n) => String.fromCharCode(n + 65)));
+    }
+    return out.join();
+  }
+  //***Hill cipher end***//
 }

@@ -16,7 +16,7 @@ class MonoAlphabeticSubstitution extends StatefulWidget {
 class _MonoAlphabeticSubstitutionState
     extends State<MonoAlphabeticSubstitution> {
   final TextEditingController inputTextController = TextEditingController();
-  final TextEditingController inputShiftController =
+  final TextEditingController inputKeyController =
       TextEditingController(text: 'QWERTYUIOPASDFGHJKLZXCVBNM');
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class _MonoAlphabeticSubstitutionState
             maxLines: 3,
           ),
           CustomTextField(
-            controller: inputShiftController,
+            controller: inputKeyController,
             title: 'Key value',
             hintText: 'Enter key value of 26 letter',
             keyboardType: TextInputType.text,
@@ -42,11 +42,12 @@ class _MonoAlphabeticSubstitutionState
           PrimaryButton(
               onPressed: () {
                 final input = inputTextController.text.trim();
-                final key = inputShiftController.text.trim();
+                final key = inputKeyController.text.trim();
 
                 if (key.length < 26) {
                   Get.showSnackbar(const GetSnackBar(
                     title: 'Error',
+                    duration: Duration(seconds: 3),
                     message: 'Key must be of 26 letters',
                   ));
                   return;
@@ -54,6 +55,7 @@ class _MonoAlphabeticSubstitutionState
                 if (!RegExp(r'^[A-Za-z]+$').hasMatch(input)) {
                   Get.showSnackbar(const GetSnackBar(
                     title: 'Error',
+                    duration: Duration(seconds: 3),
                     message: 'Input must contain only letters',
                   ));
                   return;
