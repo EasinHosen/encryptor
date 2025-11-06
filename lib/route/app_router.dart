@@ -3,6 +3,7 @@ import 'package:encryptor/view/screens/ceaser_cypher.dart';
 import 'package:encryptor/view/screens/hill_cipher.dart';
 import 'package:encryptor/view/screens/home_screen.dart';
 import 'package:encryptor/view/screens/monoalphabetic_substitution.dart';
+import 'package:encryptor/view/screens/onetimepad_cipher.dart';
 import 'package:encryptor/view/screens/polyalphabetic_cipher.dart';
 import 'package:get/get.dart';
 
@@ -38,6 +39,10 @@ class AppRouter {
     GetPage(
       name: PolyalphabeticCipher.routeName,
       page: () => const PolyalphabeticCipher(),
+    ),
+    GetPage(
+      name: OneTimePadCipher.routeName,
+      page: () => const OneTimePadCipher(),
     ),
   ];
 }

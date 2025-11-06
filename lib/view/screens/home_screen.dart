@@ -1,6 +1,7 @@
 import 'package:encryptor/view/screens/ceaser_cypher.dart';
 import 'package:encryptor/view/screens/hill_cipher.dart';
 import 'package:encryptor/view/screens/monoalphabetic_substitution.dart';
+import 'package:encryptor/view/screens/onetimepad_cipher.dart';
 import 'package:encryptor/view/screens/playfair_cipher.dart';
 import 'package:encryptor/view/screens/polyalphabetic_cipher.dart';
 import 'package:encryptor/view/styles/app_colors.dart';
@@ -57,6 +58,12 @@ class HomeScreen extends StatelessWidget {
             description:
                 'A polyalphabetic cipher encrypts text by using multiple substitution alphabets, typically controlled by a keyword. Each letter in the plaintext is shifted by a different amount depending on the corresponding letter in the key, making the cipher more resistant to frequency analysis than simple substitution ciphers. The Vigenère cipher is a well-known example.',
             onTap: () => Get.toNamed(PolyalphabeticCipher.routeName),
+          ),
+          EncryptionMethodTile(
+            title: 'One-time pad Cipher',
+            description:
+                'The one-time pad cipher encrypts text using a random key that is as long as the plaintext. Each letter is shifted according to the corresponding key letter, and the key is used only once. This method provides perfect secrecy when the key is truly random and kept secret.',
+            onTap: () => Get.toNamed(OneTimePadCipher.routeName),
           ),
         ],
       ),

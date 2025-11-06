@@ -18,6 +18,9 @@ class HomeController extends GetxController {
   RxString polyAlphabeticCipherEncryptedText = ''.obs;
   RxString polyAlphabeticCipherDecryptedText = ''.obs;
 
+  RxString oneTimePadCipherEncryptedText = ''.obs;
+  RxString oneTimePadCipherDecryptedText = ''.obs;
+
   //***Caesar cipher start***//
   String encryptCaesar(String input, int shift) {
     return input.split('').map((char) {
@@ -329,5 +332,35 @@ class HomeController extends GetxController {
     }
     return result;
   }
+
 //***polyalphabetic cipher starts***//
+//***one time pad cipher starts***//
+// Encrypts using one-time pad (key must match input length)
+  String encryptOneTimePad(String text, String key) {
+    text = text.toUpperCase().replaceAll(' ', '');
+    key = key.toUpperCase().replaceAll(' ', '');
+
+    String result = '';
+    for (int i = 0; i < text.length; i++) {
+      int t = text.codeUnitAt(i) - 65;
+      int k = key.codeUnitAt(i) - 65;
+      result += String.fromCharCode(((t + k) % 26) + 65);
+    }
+    return result;
+  }
+
+  String decryptOneTimePad(String text, String key) {
+    text = text.toUpperCase().replaceAll(' ', '');
+    key = key.toUpperCase().replaceAll(' ', '');
+    if (text.length != key.length)
+      throw Exception('Key length must match input length');
+    String result = '';
+    for (int i = 0; i < text.length; i++) {
+      int t = text.codeUnitAt(i) - 65;
+      int k = key.codeUnitAt(i) - 65;
+      result += String.fromCharCode(((t - k + 26) % 26) + 65);
+    }
+    return result;
+  }
+//***one time pad cipher starts***//
 }
