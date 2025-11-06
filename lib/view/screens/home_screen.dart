@@ -1,4 +1,5 @@
 import 'package:encryptor/view/screens/ceaser_cypher.dart';
+import 'package:encryptor/view/screens/monoalphabetic_substitution.dart';
 import 'package:encryptor/view/styles/app_colors.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +30,12 @@ class HomeScreen extends StatelessWidget {
             title: 'Caesar Cipher',
             description: 'A classic shift cipher technique.',
             onTap: () => Get.toNamed(CeaserCypher.routeName),
+          ),
+          EncryptionMethodTile(
+            title: 'Monoalphabetic substitution',
+            description:
+                'Monoalphabetic substitution is a cipher technique where each letter in the plaintext is replaced by a unique corresponding letter from a fixed substitution alphabet, making the mapping consistent throughout the message.',
+            onTap: () => Get.toNamed(MonoAlphabeticSubstitution.routeName),
           ),
         ],
       ),
