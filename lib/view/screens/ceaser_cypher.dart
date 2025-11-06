@@ -9,17 +9,17 @@ class CeaserCypher extends StatefulWidget {
   static const String routeName = '/ceaser';
 
   @override
-  State<CeaserCypher> createState() => _CeaserCypherState();
+  State<CeaserCypher> createState() => _CaeserCypherState();
 }
 
-class _CeaserCypherState extends State<CeaserCypher> {
+class _CaeserCypherState extends State<CeaserCypher> {
   final TextEditingController inputTextController = TextEditingController();
   final TextEditingController inputShiftController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Ceaser'),
+        title: const Text('Caeser'),
       ),
       body: ListView(
         padding: const EdgeInsets.all(8),
@@ -38,12 +38,12 @@ class _CeaserCypherState extends State<CeaserCypher> {
           ),
           PrimaryButton(
               onPressed: () {
-                HomeController.to.ceaserEncryptedText(HomeController.to
+                HomeController.to.caeserEncryptedText(HomeController.to
                     .encryptCaesar(inputTextController.text.trim(),
                         int.tryParse(inputShiftController.text.trim()) ?? 3));
 
-                HomeController.to.ceaserDecryptedText(HomeController.to
-                    .decryptCaesar(HomeController.to.ceaserEncryptedText.value,
+                HomeController.to.caeserDecryptedText(HomeController.to
+                    .decryptCaesar(HomeController.to.caeserEncryptedText.value,
                         int.tryParse(inputShiftController.text.trim()) ?? 3));
               },
               buttonText: 'Encrypt'),
@@ -53,7 +53,7 @@ class _CeaserCypherState extends State<CeaserCypher> {
             textAlign: TextAlign.center,
           ),
           Obx(() => Text(
-                '${HomeController.to.ceaserEncryptedText}',
+                '${HomeController.to.caeserEncryptedText}',
                 textAlign: TextAlign.center,
               )),
           SizedBox(height: Get.height * 0.01),
@@ -62,7 +62,7 @@ class _CeaserCypherState extends State<CeaserCypher> {
             textAlign: TextAlign.center,
           ),
           Obx(() => Text(
-                '${HomeController.to.ceaserDecryptedText}',
+                '${HomeController.to.caeserDecryptedText}',
                 textAlign: TextAlign.center,
               )),
         ],
